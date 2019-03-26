@@ -1,0 +1,83 @@
+{extend name="public/base" /}
+{block name="style"}{/block}
+{block name="haed"}{/block}
+{block name="menu"}{/block}
+{block name="main"}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">{$meta_title}</h3>
+            </div>
+            <form action="{:url('Auth/rules_write')}" method="post" id="cui_form" class="cui_form_write layui-form" lay-filter="cui_form">
+                {present name="id"}<input type="hidden" name="id" value="{$id}" />{/present}
+                <div class="box-body layui-form-item">
+                    <div class="form-group">
+                        <button type="button" class="layui-btn layui-btn-primary cui_tree_button" data-way="checkAll">全选</button>
+                        <button type="button" class="layui-btn layui-btn-primary cui_tree_button" data-way="uncheckAll">全不选</button>
+                        <button type="button" class="layui-btn layui-btn-primary cui_tree_button" data-way="showAll">全部展开</button>
+                        <button type="button" class="layui-btn layui-btn-primary cui_tree_button" data-way="closeAll">全部折叠</button>
+                    </div>
+                    <div class="form-group">
+                        <label>权限规则 （权限规则）</label>
+                        <div id="LAY-auth-tree-index"></div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" target-form="cui_form_write" lay-submit="" lay-filter="cui_form_write" data-way="popup">提 交</button>
+                    <a href="{:url('Auth/index')}" class="btn btn-primary cui_close" target-form="cui_form_write" lay-submit="" lay-filter="cui_close" data-way="popup">返 回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="footer"}{/block}
+{block name="script"}
+<script type="text/javascript">
+    var module = window.cuiCore.app_debug ? 'common' : 'common.min';
+    layui.config({
+        base: window.cuiCore.tpl.js + '/'
+        ,version: window.cuiCore.app_debug
+    }).extend({
+        authtree: "{/}" + window.cuiCore.tpl.static + "/dev/layui/layui_extends/authtree/authtree"
+    }).use([module, 'authtree'], function() {
+        var common = layui.common
+            ,authtree = layui.authtree;
+        
+        authtree.render('#LAY-auth-tree-index', {$authtree|raw}, {
+            inputname: 'rules[]', 
+            layfilter: 'lay-check-auth', 
+            autowidth: true,
+            openall: false,
+            valueKey: 'id'
+        });
+        
+        $('.cui_tree_button').on('click', function(event) {
+            var way = $(this).data('way');
+            switch(way) {
+                case 'checkAll': // 全选样例
+                    authtree.checkAll('#LAY-auth-tree-index');
+                    break;
+                case 'uncheckAll': // 全不选样例
+                    authtree.uncheckAll('#LAY-auth-tree-index');
+                    break;
+                case 'showAll': // 显示全部
+                    authtree.showAll('#LAY-auth-tree-index');
+                    break;
+                case 'closeAll': // 隐藏全部
+                    authtree.closeAll('#LAY-auth-tree-index');
+                    break;
+            }
+        });
+        // 表单验证
+//        common.cui_form_verify({
+//            
+//        });
+    });
+
+    $(function () {
+
+    });
+</script>
+{/block}

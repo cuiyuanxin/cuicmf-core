@@ -1,0 +1,74 @@
+{extend name="public/base" /}
+{block name="style"}{/block}
+{block name="content"}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-body table-responsive">
+                <table class="layui-table table table-hover table-bordered" id="cui_table_tree" data-url="{:url('Menu/index')}" lay-filter="cui_table_tree"></table>
+                
+                <script type="text/html" id="toolbar">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-sm" data-url="{:url('Menu/create')}" lay-event="create" data-way="popup" data-title="添加菜单">添加菜单</button>
+                        <button class="layui-btn layui-btn-sm" data-url="{:url('Menu/create')}" lay-event="expand" >全部展开</button>
+                        <button class="layui-btn layui-btn-sm" data-url="{:url('Menu/create')}" lay-event="fold" >全部折叠</button>
+                        <button class="layui-btn layui-btn-sm" data-url="{:url('Menu/create')}" lay-event="refresh" >刷新表格</button>
+                        <div class="input-group input-group-sm cuicmf-input-group">
+                            <input type="text" name="keywords" class="form-control pull-right keywords" id="keywords" placeholder="请输入ID或菜单名称" value="">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default cui_table_search" lay-event="table_search"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </script>
+                <script type="text/html" id="operationTpl">
+                    <a class="layui-btn layui-btn-xs layui-btn-normal" data-url="{:url('Menu/create')}" lay-event="sub-create" data-way="popup" data-title="添加子菜单" >添加子菜单</a>
+                    <a class="layui-btn layui-btn-xs" data-url="{:url('Menu/update')}" lay-event="update" data-way="popup" data-title="编辑菜单" >编辑</a>
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" data-url="{:url('Menu/delete')}" lay-event="delete" data-way="confirm">删除</a>
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    var treeConfig = {},
+        treetable;
+    var module = window.cuiCore.app_debug ? 'common' : 'common.min';
+    layui.config({
+        base: window.cuiCore.tpl.js + '/'
+        ,version: window.cuiCore.app_debug
+    }).use([module], function() {
+        var common = layui.common;
+        
+        var config_ = {
+            elem: 'cui_table_tree',
+            url: $('#cui_table_tree').data('url'),
+            cols: [
+                {field: 'id', title: 'ID', width: 70, fixed: 'left'}
+                , {field: 'title', title: '菜单名称', width: 300}
+                , {field: 'url', title: '路由地址'}
+                , {field: 'status_text', title: '菜单状态', width: 100}
+                , {field: 'level_text', title: '菜单层次', width: 100, align: 'center', templet: function (d) {
+                        if (d.level == 1) {
+                            return '<span class="layui-badge layui-bg-blue">' + d.level_text + '</span>';
+                        } else {
+                            return '<span class="layui-badge-rim">' + d.level_text + '</span>';
+                        }
+                }}
+                , {field: 'sort', title: '排序', width: 60}
+                , {title: '操作', fixed: 'right', templet: '#operationTpl'}
+            ]
+        };
+        
+        common.cui_table_render(config_)
+    });
+    
+    
+    
+    $(function () {
+        
+    });
+</script>
+{/block}

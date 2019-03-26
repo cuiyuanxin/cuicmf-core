@@ -1,0 +1,122 @@
+{extend name="public/base" /}
+{block name="style"}{/block}
+{block name="content"}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">{$meta_title}</h3>
+            </div>
+            <form action="{:url('Addons/write')}" method="post" id="cui_form" class="cui_form_write layui-form" lay-filter="cui_form">
+                {present name="data.id"}<input type="hidden" name="id" value="{$data.id}" />{/present}
+                <div class="box-body">
+                    <div class="form-group">
+			<label><i class="text-red">*</i> 标识名 （插件的英文字，只能使用英文及下划线且不可重复，创建后不可更改，不能有数字等）</label>
+                        <input type="text" name="name" class="form-control" id="name" placeholder="只能使用英文及下划线，且不可重复" required />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="text-red">*</i> 插件名 （插件中文名）</label>
+                        <input type="text" name="title" class="form-control" id="title" placeholder="请输入插件名" />
+                    </div>
+                    <div class="form-group">
+                        <label>插件版本 （插件版本）</label>
+                        <input type="text" name="version" class="form-control" id="version" placeholder="请输入插件版本" />
+                    </div>
+                    <div class="form-group">
+                        <label>插件作者 （插件作者）</label>
+                        <input type="text" name="author" class="form-control" id="author" placeholder="请输入插件作者" />
+                    </div>
+                    <div class="form-group">
+                        <label>插件描述 （插件描述）</label>
+                        <textarea class="form-control" name="description" id="description" rows="5" placeholder="请输入描述"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>配置文件 （是否自动生成配置文件）</label>
+                        <div>
+                            <input type="checkbox" checked="" name="is_config" id="is_config" lay-skin="switch" lay-filter="is_config" value="1" lay-text="启用|禁用">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>前台入口 （是否生成前台访问入口控制器）</label>
+                        <div>
+                            <input type="checkbox" checked="" name="is_index" id="is_index" lay-skin="switch" lay-filter="is_index" value="1" lay-text="开启|关闭">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>后台管理 （是否生成后台管理入口控制器）</label>
+                        <div>
+                            <input type="checkbox" checked="" name="is_admin" id="is_admin" lay-skin="switch" lay-filter="is_admin" value="1" lay-text="开启|关闭">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>实现的钩子方法 （实现的钩子方法）</label>
+                        <div class="" id="hooks" data-verify="true"></div>
+<!--                        <select name="hooks[]" id='hooks' lay-search="">
+                            <option value="">请选择钩子</option>
+                            {volist name="hooks" id="vo"}
+                            <option value="{$vo.name}">{$vo.name}</option>
+                            {/volist}
+                        </select>-->
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button type="button" class="btn btn-primary btn-warning" target-form="cui_form_write" data-url="{:url('Addons/preview')}" lay-submit="" lay-filter="cui_preview" data-way="preview" >预 览</button>
+                    <button type="submit" class="btn btn-primary" target-form="cui_form_write" lay-submit="" lay-filter="cui_form_write">提 交</button>
+                    <a href="{:url('Addons/index')}" class="btn btn-primary cui_close">返 回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    var module = window.cuiCore.app_debug ? 'common' : 'common.min';
+    layui.config({
+        base: window.cuiCore.tpl.js + '/'
+        ,version: window.cuiCore.app_debug
+    }).extend({
+        selectM: "{/}" + window.cuiCore.tpl.static + "/dev/layui/layui_extends/select/selectM"
+    }).use([module, 'selectM'], function() {
+        var common = layui.common
+            ,selectM = layui.selectM;
+        
+        // 多选标签-基本配置
+        var tagIns1 = selectM({
+            //元素容器【必填】
+            elem: '#hooks'
+            //候选数据【必填】
+            ,data: {$hooks|raw}
+            ,max:10
+            //默认值
+            ,selected: {$data.access|default='[]'|raw} 
+            //input的name 不设置与选择器相同(去#.)
+            ,name: 'hooks'
+            //值的分隔符
+            ,delimiter: ','
+            //候选项数据的键名
+            ,field: {idName:'name',titleName:'name'}
+        });
+        
+        // 表单初始赋值
+        common.cui_form_val('cui_form', {
+            'name': 'example'
+            ,'title': '示列'
+            ,'version': '0.1'
+            ,'author': 'cuicmf'
+            ,'description': '这是一个插件描述'
+            ,'is_config': false
+            ,'is_index': false
+            ,'is_admin': false
+        });
+        // 表单验证
+//        common.cui_form_verify({
+//            
+//        });
+    });
+  
+    $(function () {
+        
+    });
+</script>
+{/block}

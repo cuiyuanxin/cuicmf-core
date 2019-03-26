@@ -1,0 +1,120 @@
+{extend name="public/base" /}
+{block name="style"}{/block}
+{block name="content"}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">{$meta_title}</h3>
+            </div>
+            <form action="{:url('User/write')}" method="post" id="cui_form" class="cui_form_write layui-form" lay-filter="cui_form">
+                {present name="data.id"}<input type="hidden" name="id" value="{$data.id}" />{/present}
+                <div class="box-body">
+                    <div class="form-group">
+			<label><i class="text-red">*</i> 所属用户组 （所属的权限用户组）</label>
+                        <div class="" id="group_id" data-verify="true"></div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="text-red">*</i> 用户名 （管理员用户名）</label>
+                        {if isset($data.username)}
+                        <p class="form-control-static">{$data.username}</p>
+                        {else /}
+                        <input type="text" name="username" class="form-control" id="username" placeholder="请输入用户名" required />
+                        {/if}
+                    </div>
+                    {notpresent name="data.id"}
+                    <div class="form-group">
+                        <label><i class="text-red">*</i> 密 码 （管理员密码）</label>
+                        <input type="password" name="password" class="form-control" id="password" placeholder="请输入密码" required />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="text-red">*</i> 确认密码 （管理员密码）</label>
+                        <input type="password" name="confirm_password" class="form-control" id="confirm_password" required placeholder="请输入确认密码" />
+                    </div>
+                    {/notpresent}
+                    <div class="form-group">
+                        <label>姓 名 （管理员真实姓名）</label>
+                        <input type="text" name="realname" class="form-control" id="realname" placeholder="请输入姓名" />
+                    </div>
+                    <div class="form-group">
+                        <label>昵 称 （管理员昵称，不输入默认为用户名）</label>
+                        <input type="text" name="nickname" class="form-control" id="nickname" placeholder="请输入昵称" />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="text-red">*</i> 手机号 （管理员手机号，用于发送短信）</label>
+                        <input type="text" name="mobile" class="form-control" id="mobile" placeholder="请输入手机号" required />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="text-red">*</i> 邮 箱 （管理员邮箱，用于邮件发送）</label>
+                        <input type="text" name="email" class="form-control" id="email" placeholder="请输入邮箱" required />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="text-red">*</i> 状 态 （用户状态）</label>
+                        <div class="">
+                            <input type="radio" name="status" class="" value="1" title="启用" />
+                            <input type="radio" name="status" class="" value="0" title="禁用" />
+                            <input type="radio" name="status" class="" value="2" title="锁定" />
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" target-form="cui_form_write" lay-submit="" lay-filter="cui_form_write">提 交</button>
+                    <a href="{:url('User/index')}" class="btn btn-primary cui_close">返 回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    // 用户组数据
+    var authGroup = {$auth_group|raw}; 
+    
+    var module = window.cuiCore.app_debug ? 'common' : 'common.min';
+    layui.config({
+        base: window.cuiCore.tpl.js + '/'
+        ,version: window.cuiCore.app_debug
+    }).extend({
+        selectM: "{/}" + window.cuiCore.tpl.static + "/dev/layui/layui_extends/select/selectM"
+    }).use([module, 'selectM'], function() {
+        var common = layui.common
+            ,selectM = layui.selectM;
+        
+        // 多选标签-基本配置
+        var tagIns1 = selectM({
+            //元素容器【必填】
+            elem: '#group_id'
+            //候选数据【必填】
+            ,data: authGroup
+            ,max:3
+            //默认值
+            ,selected: {$data.access|default='[]'|raw} 
+            //input的name 不设置与选择器相同(去#.)
+            ,name: 'group_id'
+            //值的分隔符
+            ,delimiter: ','
+            //候选项数据的键名
+            ,field: {idName:'id',titleName:'name'}
+        });
+        
+        // 表单初始赋值
+        common.cui_form_val('cui_form', {
+            'username': '{$data.username|default=""}'
+            ,'realname': '{$data.realname|default=""}'
+            ,'nickname': '{$data.nickname|default=""}'
+            ,'mobile': '{$data.mobile|default=""}'
+            ,'email': '{$data.email|default=""}'
+            ,'status': '{$data.status|default="0"}'
+        });
+        // 表单验证
+//        common.cui_form_verify({
+//            
+//        });
+    });
+
+    $(function () {
+        
+    });
+</script>
+{/block}

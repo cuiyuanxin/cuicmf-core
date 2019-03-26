@@ -1,0 +1,50 @@
+/** table表格头部搜索框 */
+.cuicmf-input-group {
+    width: 200px;
+    float: right;
+}
+/** 表格头部操作栏 */
+.layui-table-tool {
+    z-index: 0;
+}
+/** 箭头未展开 */
+#cuiTable + .treeTable .treeTable-icon .layui-icon-triangle-d:before {
+    content: "\e602";
+}
+/** 箭头展开 */
+#cuiTable + .treeTable .treeTable-icon.open .layui-icon-triangle-d:before {
+    content: "\e61a";
+}
+/** 文件图标 */
+#cuiTable + .treeTable .treeTable-icon .layui-icon-file:before {
+    content: "\e60a";
+}
+/** 文件夹未展开 */
+#cuiTable + .treeTable .treeTable-icon .layui-icon-layer:before {
+    content: "\e62d";
+}
+/** 文件夹展开 */
+#cuiTable + .treeTable .treeTable-icon.open .layui-icon-layer:before {
+    content: "\e60f";
+}
+/** 选项卡 */
+.layui-tab-title .layui-this::after {
+    height: 40px;
+}
+/** 开关switch */
+.layui-form-switch {
+    height: auto;
+}
+/** 登录页样式 */
+.verify_img {
+    cursor: pointer;
+    width: 100%;
+    border: 1px solid #d5d5d5;
+}
+.login-box .cui_form_write {
+    width: 100%;
+}
+/** 管理员添加更新 */
+.lay-ext-mulitsel .layui-input.multiple a {
+    height: auto;
+}

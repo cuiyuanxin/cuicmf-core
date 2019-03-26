@@ -1,0 +1,60 @@
+{extend name="public/base" /}
+{block name="style"}{/block}
+{block name="content"}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-body table-responsive">
+                <table class="layui-table table table-hover table-bordered" id="cui_table" data-url="{:url('User/index')}" lay-filter="cui_table"></table>
+            
+                <script type="text/html" id="toolbar">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-sm" data-url="{:url('User/create')}" lay-event="create">添加管理员</button>
+                        <div class="input-group input-group-sm cuicmf-input-group">
+                            <input type="text" name="keywords" class="form-control pull-right keywords" id="keywords" placeholder="请输入ID或用户名或手机号" value="">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default cui_table_search" lay-event="table_search"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </script>
+                <script type="text/html" id="operationTpl">
+                    <a class="layui-btn layui-btn-xs" data-url="{:url('User/update')}" lay-event="update" >编辑</a>
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" data-url="{:url('User/delete')}" lay-event="delete" data-way="confirm">删除</a>
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    var module = window.cuiCore.app_debug ? 'common' : 'common.min';
+    layui.config({
+        base: window.cuiCore.tpl.js + '/'
+        ,version: window.cuiCore.app_debug
+    }).use([module], function() {
+        var common = layui.common;
+        
+        var config_ = {
+            url: $('#cui_table').data('url'),
+            cols: [
+                {type: 'checkbox', fixed: 'left'}, 
+                {field: 'id', title: 'ID', width: 70, sort: true, fixed: 'left'}, 
+                {field: 'username', title: '用户名', width: 150}, 
+                {field: 'auth_group_text', title: '角色组', width: 150}, 
+                {field: 'nickname', title: '昵称', width: 150}, 
+                {field: 'mobile', title: '电话', width: 150}, 
+                {field: 'status_text', title: '状态', width: 150}, 
+                {title: '操作', fixed: 'right', templet: '#operationTpl'}
+            ]
+        };
+        
+        common.cui_table_render(config_)
+    });
+    
+    $(function () {
+
+    });
+</script>
+{/block}

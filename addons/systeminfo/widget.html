@@ -1,0 +1,48 @@
+<div class="col-md-5">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">{$addons_config.title|default=lang('system info')}</h3>
+
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="table-responsive">
+                <table class="table no-margin">
+                    <tbody>
+                        <tr>
+                            <th>CuiCMF版本</th>
+                            <td>{$Think.config.cui_config.cuicmf_version}</td>
+                        </tr>
+                        <tr>
+                            <th>服务器操作系统</th>
+                            <td>{$Think.const.PHP_OS}</td>
+                        </tr>
+                        <tr>
+                            <th>ThinkPHP版本</th>
+                            <td>{$Think.VERSION}</td>
+                        </tr>
+                        <tr>
+                            <th>运行环境</th>
+                            <td>{$_SERVER['SERVER_SOFTWARE']}</td>
+                        </tr>
+                        <tr>
+                            <th>MYSQL版本</th>
+                            <td>{$system_info_mysql.0.version}</td>
+                        </tr>
+                        <tr>
+                            <th>上传限制</th>
+                            <td>{:ini_get('upload_max_filesize')}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

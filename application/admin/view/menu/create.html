@@ -1,0 +1,140 @@
+{extend name="public/base" /}
+{block name="style"}{/block}
+{block name="haed"}{/block}
+{block name="menu"}{/block}
+{block name="main"}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">{$meta_title}</h3>
+            </div>
+            <form action="{:url('Menu/write')}" method="post" id="cui_form" class="cui_form_write layui-form" lay-filter="cui_form">
+                {present name="data.id"}<input type="hidden" name="id" value="{$data.id}" />{/present}
+                <div class="box-body">
+                    <div class="form-group">
+                        <label><i class="text-red">*</i> 上级菜单 （所属的上级菜单）</label>
+                        <select class="form-control" name="pid" id="pid" lay-search="">
+                            <option value="0">顶级菜单</option>
+                            {$menu_select|raw}
+                             <!--data-verify="true"-->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="text-red">*</i> 名称 （系统后台显示菜单名称）</label>
+                        <input type="text" name="title" class="form-control" id="title" placeholder="请输入菜单名称" >
+                    </div>
+                    <div class="form-group">
+                        <label><i class="text-red">*</i> 链接 （url函数解析的URL或者外链）</label>
+                        <input type="text" name="url" class="form-control" id="url" placeholder="请输入菜单链接" >
+                    </div>
+                    <div class="form-group">
+                        <label>附加条件 （附加条件）</label>
+                        <input type="text" name="condition" class="form-control" id="condition" placeholder="请输入附加条件" >
+                    </div>
+                    <div class="form-group">
+                        <label><i class="text-red">*</i> 是否隐藏 （若隐藏则在菜单中不显示）</label>
+                        <div class="radio">
+                            <input type="radio" name="status" title="显示" value="1" >
+                            <input type="radio" name="status" title="隐藏" value="0" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>图标 （菜单小图标，为空则显示系统默认图标）</label>
+                        <div class="">
+                            <input type="text" name="icon" class="form-control" id="icon" placeholder="请选择菜单图标" lay-filter="icon" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>排序值 （用户菜单的排序，默认为 0）</label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default cui_plus" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+                            </span>
+                            <input type="text" name="sort" class="form-control cui_number" id="sort" placeholder="请输入菜单排序" data-max="99999">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default cui_sub" type="button"><i class="glyphicon glyphicon-minus"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" target-form="cui_form_write" lay-submit="" lay-filter="cui_form_write" data-way="popup" data-elem="cui_table_tree">提 交</button>
+                    <a href="{:url('Menu/index')}" class="btn btn-primary cui_close" target-form="cui_form_write" lay-submit="" lay-filter="cui_close" data-way="popup" data-elem="cui_table_tree">返 回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="footer"}{/block}
+{block name="script"}
+<script type="text/javascript">
+    var module = window.cuiCore.app_debug ? 'common' : 'common.min';
+    layui.config({
+        base: window.cuiCore.tpl.js + '/'
+        ,version: window.cuiCore.app_debug
+    }).extend({
+        iconPicker: "{/}" + window.cuiCore.tpl.static + "/dev/layui/layui_extends/iconPicker/iconPicker"
+    }).use([module, 'iconPicker'], function() {
+        var common = layui.common
+            ,iconPicker = layui.iconPicker;
+        
+        iconPicker.render({
+            // 选择器，推荐使用input
+            elem: '#icon',
+            // 数据类型：fontClass/unicode/fontAwesome/Glyphicons，推荐使用fontClass
+            type: 'fontAwesome',
+            // 是否开启搜索：true/false
+            search: true,
+            // 是否开启分页
+            page: true,
+            // 每页显示数量，默认12
+            limit: 12,
+            // 每个图标格子的宽度：'43px'或'20%'
+            cellWidth: '43px',
+            // 点击回调
+            click: function (data) {
+//                console.log(data);
+            },
+            // 渲染成功后的回调
+            success: function(d) {
+//                console.log(d);
+            }
+        });
+
+        /**
+         * 选中图标 （常用于更新时默认选中图标）
+         * @param filter lay-filter
+         * @param iconName 图标名称，自动识别fontClass/unicode
+         */
+        iconPicker.checkIcon('icon', '{$data.icon|default="fa fa-circle-o"}');
+        
+        // 表单初始赋值
+        common.cui_form_val('cui_form', {
+            'pid': '{$data.pid|default="0"}'
+            ,'title': '{$data.title|default=""}'
+            ,'url': '{$data.url|default=""}'
+            ,'condition': '{$data.condition|default=""}'
+            ,'status': '{$data.status|default="0"}'
+            ,'icon': '{$data.icon|default="fa fa-circle-o"}'
+            ,'sort': '{$data.sort|default="0"}'
+        });
+        // 表单验证
+//        common.cui_form_verify({
+//            
+//        });
+    });
+    
+    $(function () {
+        // 返回按钮监控
+//        $('.cui_close').on('click', function(event) {
+//            var index = parent.layer.getFrameIndex(window.name);
+//            parent.layer.close(index);
+//            parent.config_.data = '';
+//            parent.layui.treetable.render(parent.config_);
+//        });
+        
+    });
+</script>
+{/block}

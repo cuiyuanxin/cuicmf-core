@@ -1,0 +1,27 @@
+{
+    "name": "cuicmf/think-auth",
+    "description": "The ThinkPHP5.1 Auth Package",
+    "homepage": "https://github.com/cuiyuanxin/think-auth",
+    "type": "library",
+    "license": "Apache-2.0",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "cuiyuanxin",
+            "email": "15811506097@163.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/cuiyuanxin/think-auth/issues"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.6.0",
+        "topthink/framework": "5.1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "think\\": "src/"
+        }
+    }
+}

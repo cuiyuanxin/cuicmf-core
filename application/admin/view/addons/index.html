@@ -1,0 +1,135 @@
+{extend name="public/base" /}
+{block name="style"}{/block}
+{block name="content"}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="nav-tabs-custom layui-tab" lay-filter="cui_tab">
+            <ul class="nav nav-tabs layui-tab-title">
+                <li class="layui-this active" lay-event="installed">已安装的插件</li>
+                <li lay-event="uninstalled">未安装的插件</li>
+            </ul>
+            <div class="tab-content layui-tab-content">
+                <div class="layui-tab-item layui-show tab-pane">
+                    <table class="layui-table table table-hover table-bordered" id="cui_table_installed" data-url="{:url('Addons/index')}" lay-filter="cui_table_installed"></table>
+                    
+                    <script type="text/html" id="toolbar_install">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" data-url="{:url('Addons/create')}" lay-event="create">快速创建插件</button>
+                            <div class="input-group input-group-sm cuicmf-input-group">
+                                <input type="text" name="keywords" class="form-control pull-right keywords" id="keywords" placeholder="请输入插件名称或目录" value="">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default cui_table_search" lay-event="table_search"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </script>
+                    <script type="text/html" id="install_operationTpl">
+                        {{# if(d.is_index){ }}
+                        <!--<a class="layui-btn layui-btn-xs layui-btn-primary" data-url="{:url('Addons/uninstall')}" lay-event="visit">访问</a>-->
+                        {{# } }}
+                        {{# if(d.is_admin){ }}
+                        <!--<a class="layui-btn layui-btn-xs layui-btn-primary" data-url="{:url('Addons/uninstall')}" lay-event="manager">管理</a>-->
+                        {{# } }}
+                        {{# if(d.setting_length > 0){ }}
+                        <!--<a class="layui-btn layui-btn-xs layui-btn-primary" data-url="{:url('Addons/uninstall')}" lay-event="setting">设置</a>-->
+                        {{# } }}
+                        {{# if(d.status == 1){ }}
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-url="{:url('Addons/uninstall')}" lay-event="delete" data-way="confirm">卸载</a>
+                        {{# } }}
+                    </script>
+                </div>
+                <div class="layui-tab-item tab-pane">
+                    <table class="layui-table table table-hover table-bordered" id="cui_table_uninstalled" data-url="{:url('Addons/uninstalled')}" lay-filter="cui_table_uninstalled" ></table>
+                    
+                    <script type="text/html" id="toolbar_uninstall">
+                        <div class="layui-btn-container">
+                            <div class="input-group input-group-sm cuicmf-input-group" style="float: none;">
+                                <input type="text" name="keywords" class="form-control pull-right keywords" id="keywords" placeholder="请输入插件名称或目录" value="">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default cui_table_search" lay-event="table_search"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </script>
+                    <script type="text/html" id="uninstall_operationTpl">
+                        <a class="layui-btn layui-btn-xs" data-url="{:url('Addons/install')}" lay-event="install" data-way="confirm">安装</a>
+                        {{# if(d.status != 0){ }}
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-url="{:url('Addons/delete')}" lay-event="delete" data-way="confirm">删除</a>
+                        {{# } }}
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    var module = window.cuiCore.app_debug ? 'common' : 'common.min';
+    layui.config({
+        base: window.cuiCore.tpl.js + '/'
+        ,version: window.cuiCore.app_debug
+    }).use([module, 'element'], function() {
+        var common = layui.common
+            ,element = layui.element;
+        
+        var installed_cols = [ 
+            {field: 'id', title: 'ID', width: 70, sort: true, fixed: 'left'}
+            , {field: 'title', title: '插件名称', minWidth:180, sort: true}
+            , {field: 'name', title: '插件目录', minWidth:180, sort: true}
+            , {field: 'version', title: '版本号', width:90, sort: true}
+            , {field: 'author', title: '作者', width:120, sort: true}
+            , {field: 'create_text', title: '安装时间', width:165, sort: true}
+            , {field: 'status_text', title: '状态', width: 150}
+            , {title: '操作', fixed: 'right', templet: '#install_operationTpl'}
+        ];
+        
+        var uninstalled_cols = [ 
+            {field: 'id', title: 'ID', width: 70, sort: true, fixed: 'left'}
+            , {field: 'title', title: '插件名称', minWidth:180, sort: true}
+            , {field: 'name', title: '插件目录', minWidth:180, sort: true}
+            , {field: 'version', title: '版本号', width:90, sort: true}
+            , {field: 'author', title: '作者', width:120, sort: true}
+            , {title: '插件类型', width:150, templet: function(d){ return d.status ? '自定义' : '系统';}}
+            , {title: '操作', fixed: 'right', templet: '#uninstall_operationTpl'}
+        ];
+            
+        var config_ = {
+            elem: 'cui_table_installed',
+            url: $('#cui_table_installed').data('url'),
+            toolbar: '#toolbar_install',
+            cols: installed_cols
+        };
+        
+        element.on('tab(cui_tab)', function(data){
+            $(this).siblings().removeClass('active');
+            $(this).addClass('active');
+            var filter = $(this).attr('lay-event');
+            if ($(this).hasClass('layui-this')) {
+                if(filter === 'installed') {
+                    config_ = {
+                        elem: 'cui_table_installed',
+                        url: $('#cui_table_installed').data('url'),
+                        toolbar: '#toolbar_install',
+                        cols: installed_cols
+                    };
+                } else {
+                    config_ = {
+                        elem: 'cui_table_uninstalled',
+                        url: $('#cui_table_uninstalled').data('url'),
+                        toolbar: '#toolbar_uninstall',
+                        cols: uninstalled_cols
+                    };
+                }
+            }
+            common.cui_table_render(config_);
+        });
+
+        common.cui_table_render(config_);
+    });
+    
+    $(function () {
+        
+    });
+</script>
+{/block}

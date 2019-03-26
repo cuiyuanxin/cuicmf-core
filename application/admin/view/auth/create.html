@@ -1,0 +1,68 @@
+{extend name="public/base" /}
+{block name="style"}{/block}
+{block name="haed"}{/block}
+{block name="menu"}{/block}
+{block name="main"}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">{$meta_title}</h3>
+            </div>
+            <form action="{:url('Auth/write')}" method="post" id="cui_form" class="cui_form_write layui-form" lay-filter="cui_form">
+                {present name="data.id"}<input type="hidden" name="id" value="{$data.id}" />{/present}
+                <div class="box-body">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label><i class="text-red">*</i> 用户组 （用户组名称）</label>
+                            <input type="text" name="title" class="form-control" id="title" placeholder="请输入用户组名称">
+                        </div>
+                        <div class="form-group">
+                            <label>角色组描述 （角色分组描述）</label>
+                            <textarea class="form-control" name="description" id="description" rows="5" placeholder="请输入用户组描述"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="text-red">*</i> 状 态 （用户组状态）</label>
+                            <div class="">
+                                <input type="radio" name="status" value="1" title="启用">
+                                <input type="radio" name="status" value="0" title="禁用">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" target-form="cui_form_write" lay-submit="" lay-filter="cui_form_write" data-way="popup">提 交</button>
+                    <a href="{:url('Auth/index')}" class="btn btn-primary cui_close" target-form="cui_form_write" lay-submit="" lay-filter="cui_close" data-way="popup">返 回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="footer"}{/block}
+{block name="script"}
+<script type="text/javascript">
+    var module = window.cuiCore.app_debug ? 'common' : 'common.min';
+    layui.config({
+        base: window.cuiCore.tpl.js + '/'
+        ,version: window.cuiCore.app_debug
+    }).use([module], function() {
+        var common = layui.common;
+
+        // 表单初始赋值
+        common.cui_form_val('cui_form', {
+            'title': '{$data.title|default=""}'
+            ,'description': '{$data.description|default=""}'
+            ,'status': '{$data.status|default="0"}'
+        });
+        // 表单验证
+//        common.cui_form_verify({
+//            
+//        });
+    });
+
+    $(function () {
+        
+    });
+</script>
+{/block}

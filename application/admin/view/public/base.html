@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{$meta_title|default="控制台"} | cuicmf内容管理系统</title>
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <meta name="renderer" content="webkit">
+        <meta name="author" content="cuiyuanxin, 15811506097@163.com" />
+        <link href="{:resources('__STATIC__/images/favicon-32X32', 'ico')}" rel="icon" type="image/x-icon">
+        <link rel="stylesheet" href="{:resources('__STATIC__/dev/bootstrap3/css/bootstrap', 'css')}">
+        <link rel="stylesheet" href="{:resources('__STATIC__/dev/font-awesome/css/font-awesome', 'css')}">
+        <link rel="stylesheet" href="{:resources('__STATIC__/dev/ionicons/css/ionicons', 'css')}">
+        <link rel="stylesheet" href="{:resources('__STATIC__/dev/pace/pace-theme-corner-indicator', 'css', ['min' => false])}">
+        <!--[if lt IE 9]>
+        <script src="{:resources('__STATIC__/dev/html5shiv/html5shiv', 'js')}"></script>
+        <script src="{:resources('__STATIC__/dev/respond/respond', 'js')}"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="{:resources('__STATIC__/dev/googleapis/css/googleapis', 'css')}">
+        {block name="style"}{/block}
+        <link rel="stylesheet" href="{:resources('__CSS__/AdminLTE', 'css')}">
+        <link rel="stylesheet" href="{:resources('__CSS__/skins/_all-skins', 'css')}">
+        <link rel="stylesheet" href="{:resources('__STATIC__/dev/layui/css/layui', 'css', ['min' => false])}">
+        <link rel="stylesheet" href="{:resources('__CSS__/common', 'css')}">
+        <script type="text/javascript">
+            // js全局变量
+            window.cuiCore = {
+//                baseUrl: "{:request()->root()}/",
+//                route: ['{:request()->module()}', '{:request()->controller()}', '{:request()->action()}'],
+                app_debug: {$Think.config.app.app_debug},
+                tpl: {
+                    root: "{:resources('__ROOT__')}",
+                    public: "{:resources('__PUBLIC__')}",
+                    static: "{:resources('__STATIC__')}",
+                    addons: "{:resources('__ADDONS__')}",
+                    img: "{:resources('__IMG__')}",
+                    js: "{:resources('__JS__')}",
+                    css: "{:resources('__CSS__')}",
+                    statics: "{:resources('__STATICS__')}"
+                }
+            };
+        </script>
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini">
+        {block name="main"}
+            <div class="wrapper">
+                {block name="haed"}
+                <header class="main-header">
+                    <a href="{:url('Index/index')}" class="logo">
+                        <span class="logo-mini"><b>C</b>ui</span>
+                        <span class="logo-lg"><b>Cui</b>CMF</span>
+                    </a>
+
+                    <nav class="navbar navbar-static-top">
+                        <a href="javascript:void(0);" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <div class="navbar-custom-menu">
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown messages-menu">
+                                    <a href="javascript:void(0);" class="dropdown-toggle cui_clear" data-url="{:url('System/clear')}" lay-submit="" lay-filter="cui_clear">
+                                        <i class="fa fa-refresh"></i> 清空缓存
+                                    </a>
+                                </li>
+                                <li class="dropdown user user-menu">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                                        <img src="{:resources('__ROOT__uploads/photo/photo', 'png')}" class="user-image" alt="{if user_auth('realname')}{:user_auth('realname')}{elseif user_auth('nickname') /}{:user_auth('nickname')}{else /}{:user_auth('username')}{/if}">
+                                        <span class="hidden-xs">{if user_auth('realname')}{:user_auth('realname')}{elseif user_auth('nickname') /}{:user_auth('nickname')}{else /}{:user_auth('username')}{/if}</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="user-header">
+                                            <img src="{:resources('__ROOT__uploads/photo/photo', 'png')}" class="img-circle" alt="{if user_auth('realname')}{:user_auth('realname')}{elseif user_auth('nickname') /}{:user_auth('nickname')}{else /}{:user_auth('username')}{/if}">
+                                            <p>
+                                                {if user_auth('realname')}{:user_auth('realname')}{elseif user_auth('nickname') /}{:user_auth('nickname')}{else /}{:user_auth('username')}{/if}
+                                                {:group_rule()}
+                                                <small>最后一次登录时间：{:date('Y-m-d H:i', user_auth('last_login_time'))}</small>
+                                            </p>
+                                        </li>
+                                        <li class="user-footer">
+                                            <div class="pull-left">
+                                                <a href="javascript:void(0);" class="btn btn-default btn-flat" data-toggle="modal" data-target="#modal-change-password">修改密码</a>
+                                            </div>
+                                            <div class="pull-right">
+                                                <a href="javascript:void(0);" class="btn btn-default btn-flat cui_logout" data-url="{:url('Login/logout')}" lay-submit="" lay-filter="cui_logout">退出</a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!-- 设置按钮 -->
+                                <li>
+                                    <a href="javascript:;" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                                </li>
+                                <!-- /设置按钮 -->
+                            </ul>
+                        </div>
+                    </nav>
+                </header>
+                {/block}
+                {block name="menu"}
+                <aside class="main-sidebar">
+                    <section class="sidebar">
+                        <div class="user-panel">
+                            <div class="pull-left image">
+                                <img src="{:resources('__ROOT__uploads/photo/photo', 'png')}" class="img-circle" alt="{if user_auth('realname')}{:user_auth('realname')}{elseif user_auth('nickname') /}{:user_auth('nickname')}{else /}{:user_auth('username')}{/if}">
+                            </div>
+                            <div class="pull-left info">
+                                <p>{if user_auth('realname')}{:user_auth('realname')}{elseif user_auth('nickname') /}{:user_auth('nickname')}{else /}{:user_auth('username')}{/if}</p>
+                                <a href="javascript:void(0);"><i class="fa fa-circle text-success"></i> 
+                                    {:group_rule()}
+                                </a>
+                            </div>
+                        </div>
+
+                        <form action="#" class="sidebar-form" id='cui_search_from' onsubmit="return false;">
+                            <div class="input-group">
+                                <input type="text" name="title" id='search_title' class="form-control" placeholder="输入菜单名称搜索...">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-flat cui_search" lay-submit="" lay-filter="cui_search">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                        <ul class="sidebar-menu" data-widget="tree">
+                            <li class="header">导航列表</li>
+                            {$menus|raw}
+                        </ul>
+                    </section>
+                </aside>
+                {/block}
+                
+                <div class="content-wrapper">
+                    <section class="content-header">
+                        <h1>
+                            {$meta_title}
+                        </h1>
+                    </section>
+                    <section class="content">
+                        {block name="content"}{/block}
+                    </section>
+                </div>
+                
+                {block name="footer"}
+                <footer class="main-footer">
+                    <div class="pull-right hidden-xs">
+                        <b>Version</b> {$Think.config.cui_config.cuicmf_version}
+                    </div>
+                    <strong>Copyright &copy; 2018-{:date('Y')} <a href="javascript:void(0);">cuicmf内容管理系统</a>.</strong> All rights
+                    reserved.
+                </footer>
+                {/block}
+                
+                <!-- 设置 --> 
+                <aside class="control-sidebar control-sidebar-dark">
+                    <div class="tab-content">
+                        <div class="tab-pane" id="control-sidebar-home-tab">
+                        </div>
+                    </div>
+                </aside>
+                <!-- /设置 -->
+                <!-- 修改密码 -->
+                <div class="modal fade" id="modal-change-password">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title">修改密码</h4>
+                            </div>
+                            <form action="{:url('User/change_password')}" method="post" class="cui_from_change">
+                                <div class="modal-body">
+                                    <div class="form-group has-feedback">
+                                        <input type="text" id="password" class="form-control" name="password" placeholder="请输入当前密码">
+                                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <input type="text" id="new_password" class="form-control" name="new_password" placeholder="请输入新密码">
+                                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <input type="text" id="confirm_password" class="form-control" name="confirm_password" placeholder="确认新密码">
+                                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
+                                    <button type="submit" class="btn btn-primary ajax-post submit" target-form="cui_from_change">修改</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- /修改密码 -->
+            </div>
+        {/block}
+
+        <script type="text/javascript" src="{:resources('__STATIC__/dev/jquery/jquery-3.3.1', 'js')}"></script>
+        <script type="text/javascript" src="{:resources('__STATIC__/dev/bootstrap3/js/bootstrap', 'js')}"></script>
+        <script type="text/javascript" src="{:resources('__STATIC__/dev/fastclick/fastclick', 'js', ['min' => false])}"></script>
+        <script type="text/javascript" src="{:resources('__JS__/adminlte', 'js')}"></script>
+        <script type="text/javascript" src="{:resources('__STATIC__/dev/jquery-slimscroll/jquery.slimscroll', 'js')}"></script>
+        <script type="text/javascript" src="{:resources('__STATIC__/dev/pace/pace', 'js')}"></script>
+        <script type="text/javascript" src="{:resources('__STATIC__/dev/layui/layui', 'js', ['min' => false])}"></script>
+        <script type="text/javascript">
+            // 加载入口
+            var module = window.cuiCore.app_debug ? 'common' : 'common.min';
+            layui.config({
+                base: window.cuiCore.tpl.js + '/'
+                ,version: window.cuiCore.app_debug
+            }).use([module]);
+        </script>
+        <!-- 扩展javascript -->
+        {block name="script"}{/block}
+    </body>
+</html>

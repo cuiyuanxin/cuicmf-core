@@ -1,0 +1,36 @@
+{
+  "name": "cuicmf",
+  "description": "cuicmf内容管理系统",
+  "main": "main.js",
+  "authors": [
+    "cuiyuanxin <15811506097@163.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/static/static/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3",
+    "font-awesome": "^4",
+    "ionicons": "^4.5.5",
+    "html5shiv": "^3.7.3",
+    "respond": "^1.4.2",
+    "layer": "https://github.com/sentsin/layer.git#^3.1.1",
+    "layui": "https://github.com/sentsin/layui.git#^2.4.5",
+    "laydate": "https://github.com/sentsin/laydate.git#^5.0.85",
+    "jquery": "^3.3.1",
+    "fastclick": "^1.0.6",
+    "jquery-slimscroll": "^1.3.8",
+    "layui-select-ext": "https://gitee.com/moretop/layui-select-ext.git",
+    "treetable-lay": "https://gitee.com/whvse/treetable-lay.git",
+    "iconpicker": "https://gitee.com/wujiawei0926/iconpicker.git",
+    "layui-authtree": "https://github.com/wangerzi/layui-authtree.git",
+    "PACE": "pace#^1.0.2"
+  }
+}
